@@ -1,0 +1,25 @@
+                                ### Disabling Storage node ###
+                                echo ". type:nsr Storage Node;name:"$NSRCLIENTRES_NAME"" > /tmp/shyam
+                                echo "update enabled: No" >> /tmp/shyam
+                                scp /tmp/shyam root@"$BCK_SERVER":/tmp/shyam
+                                /bin/ssh $SSH_OPTS -n -q -l root "$BCK_SERVER" "/opt/networker/sbin/nsradmin -i /tmp/shyam"
+                                cat /tmp/shyam
+                                rm /tmp/shyam
+
+                                ### Disabling Schedule from backup ###
+                                echo ". type:nsr client;name:"$NSRCLIENTRES_NAME"" > /tmp/shyam
+                                echo "update scheduled backup: Disabled" >> /tmp/shyam
+                                scp /tmp/shyam root@"$BCK_SERVER":/tmp/shyam
+                                /bin/ssh $SSH_OPTS -n -q -l root "$BCK_SERVER" "/opt/networker/sbin/nsradmin -i /tmp/shyam"
+                                cat /tmp/shyam
+                                rm /tmp/shyam
+
+=======================
+                        /bin/ssh $SSH_OPTS -n -q -l root "$BCK_SERVER" "grep -i "$CLIENT" \`find /opt/networker/scripts/reporting/t02/reports/report_short_*
+-type f | tail -8\` " |awk '{if($13==$14) print $0}'|egrep ''$dd_var2'' |tail -1 > /tmp/count_output.txt
+                        bck_count=`cat /tmp/count_output.txt |wc -l`
+
+
+                        if [[ `cat $HOME/temp_mminfo_output|egrep ''$dates_var2''|wc -l` -gt 0 && $bck_count -eq 1 ]]
+                        then
+                                cat $HOME/temp_mminfo_output
